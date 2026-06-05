@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Админ-панель - IP-42-Team{% endblock %}
+
+{% block content %}
+<section class="admin-dashboard">
+    <div class="admin-header">
+        <h1 class="admin-title">
+            <i class="bi bi-speedometer2"></i> Панель управления
+        </h1>
+        <div class="admin-nav">
+            <a href="{{ url_for('admin_dashboard') }}" class="active">
+                <i class="bi bi-house"></i> Главная
+            </a>
+            <a href="{{ url_for('admin_messages') }}">
+                <i class="bi bi-envelope"></i> Сообщения
+            </a>
+            <a href="{{ url_for('admin_cases') }}">
+                <i class="bi bi-folder"></i> Кейсы
+            </a>
+            <a href="{{ url_for('admin_logout') }}" class="logout">
+                <i class="bi bi-box-arrow-right"></i> Выйти
+            </a>
+        </div>
+    </div>
+    
+    <!-- Статистика -->
+    <div class="stats-grid">
+        <div class="stat-card fade-in">
+            <div class="stat-number">{{ total }}</div>
+            <div class="stat-label">Всего сообщений</div>
+        </div>
+        <div class="stat-card fade-in">
+            <div class="stat-number">{{ unread }}</div>
+            <div class="stat-label">Непрочитанных</div>
+        </div>
+        <div class="stat-card fade-in">
+            <div class="stat-number">{{ total - unread }}</div>
+            <div class="stat-label">Прочитанных</div>
+        </div>
+        <div class="stat-card fade-in">
+            <div class="stat-number">{{ current_user.username }}</div>
+            <div class="stat-label">Администратор</div>
+        </div>
+    </div>
+    
+    <!-- Последние сообщения -->
+    <div class="fade-in">
+        <h2 style="color: #ffcc00; margin-bottom: 20px; font-size: 1.5rem;">
+            <i class="bi bi-clock-history"></i> Последние сообщения
+        </h2>
+        
+        {% if messages %}
+        <div style="overflow-x: auto;">
+            <table class="messages-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Имя</th>
+                        <th>Email</th>
+                        <th>Тема</th>
+                        <th>Дата</th>
+                        <th>Статус</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for message in messages %}
+                    <tr class="{% if not message.is_read %}unread{% endif %}">
+                        <td>#{{ message.id }}</td>
+                        <td>{{ message.name }}</td>
+                        <td>{{ message.email }}</td>
+                        <td>{{ message.subject[:40] }}{% if message.subject|length > 40 %}...{% endif %}</td>
+                        <td>{{ message.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                        <td>
+                            <span class="status-badge {% if message.is_read %}read{% else %}unread{% endif %}">
+                                {% if message.is_read %}
+                                    <i class="bi bi-check-circle"></i> Прочитано
+                                {% else %}
+                                    <i class="bi bi-circle"></i> Новое
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td>
+                            {% if not message.is_read %}
+                            <form action="{{ url_for('mark_message_read', message_id=message.id) }}" method="POST" style="display: inline;">
+                                <button type="submit" class="action-btn read" title="Отметить как прочитанное">
+                                    <i class="bi bi-check"></i>
+                                </button>
+                            </form>
+                            {% else %}
+                            <form action="{{ url_for('mark_message_unread', message_id=message.id) }}" method="POST" style="display: inline;">
+                                <button type="submit" class="action-btn unread" title="Отметить как непрочитанное">
+                                    <i class="bi bi-circle"></i>
+                                </button>
+                            </form>
+                            {% endif %}
+                            <form action="{{ url_for('delete_message', message_id=message.id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Удалить сообщение?');">
+                                <button type="submit" class="action-btn delete" title="Удалить">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{{ url_for('admin_messages') }}" class="case-card-btn">
+                Все сообщения <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-inbox"></i>
+            <p>Сообщений пока нет</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

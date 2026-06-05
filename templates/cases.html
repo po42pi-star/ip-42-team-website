@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Кейсы - IP-42-Team{% endblock %}
+
+{% block content %}
+<!-- Заголовок страницы -->
+<div class="page-header">
+    <h1 class="page-title">Наши кейсы</h1>
+    <p class="page-subtitle">
+        Примеры реализованных проектов. Каждый кейс — это уникальное решение, 
+        созданное с учетом задач конкретного бизнеса.
+    </p>
+</div>
+
+<!-- Секция с кейсами -->
+<section class="section">
+    <div class="cases-grid">
+        {% for case in cases %}
+        <div class="case-card fade-in">
+            <div class="case-card-image">
+                {% if case.slug == 'ai-support-assistant' %}
+                    <i class="bi bi-headset"></i>
+                {% elif case.slug == 'ai-review-assistant' %}
+                    <i class="bi bi-chat-heart"></i>
+                {% elif case.slug == 'telegram-parser-bot' %}
+                    <i class="bi bi-database-check"></i>
+                {% else %}
+                    <i class="bi bi-database-check"></i>
+                {% endif %}
+            </div>
+            <div class="case-card-content">
+                <h3 class="case-card-title">{{ case.title }}</h3>
+                <p class="case-card-description">{{ case.short_description }}</p>
+                <a href="{{ url_for('case_detail', slug=case.slug) }}" class="case-card-btn">
+                    Подробнее <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- CTA секция -->
+<section class="cta-section">
+    <div class="cta-content fade-in">
+        <h2 class="cta-title">Хотите такой же проект?</h2>
+        <p class="cta-text">
+            Свяжитесь с нами для обсуждения вашего проекта. Мы поможем реализовать 
+            любую идею с использованием современных технологий.
+        </p>
+        <a href="{{ url_for('contact') }}" class="cta-button">
+            <i class="bi bi-send"></i> Оставить заявку
+        </a>
+    </div>
+</section>
+{% endblock %}

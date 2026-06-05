@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Главная - IP-42-Team{% endblock %}
+
+{% block content %}
+<!-- Hero секция -->
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">
+            Разработка<br>
+            <span class="highlight">современных</span><br>
+            веб-решений
+        </h1>
+        <p class="hero-subtitle">
+            Создаем инновационные цифровые продукты: от Telegram-ботов до AI-ассистентов. 
+            Превращаем идеи в работающие решения.
+        </p>
+        <a href="{{ url_for('contact') }}" class="hero-btn">
+            <i class="bi bi-send-fill"></i> Обсудить проект
+        </a>
+    </div>
+</section>
+
+<!-- Секция с кейсами -->
+<section class="section">
+    <h2 class="section-title">Наши кейсы</h2>
+    <p class="section-description">
+        Посмотрите примеры наших работ. Мы реализуем проекты любой сложности 
+        с использованием современных технологий.
+    </p>
+    
+    <div class="cases-grid">
+        {% for case in cases %}
+        <div class="case-card fade-in">
+            <div class="case-card-image">
+                {% if case.slug == 'ai-support-assistant' %}
+                    <i class="bi bi-headset"></i>
+                {% elif case.slug == 'ai-review-assistant' %}
+                    <i class="bi bi-chat-heart"></i>
+                {% elif case.slug == 'telegram-parser-bot' %}
+                    <i class="bi bi-database-check"></i>
+                {% else %}
+                    <i class="bi bi-database-check"></i>
+                {% endif %}
+            </div>
+            <div class="case-card-content">
+                <h3 class="case-card-title">{{ case.title }}</h3>
+                <p class="case-card-description">{{ case.short_description }}</p>
+                <a href="{{ url_for('case_detail', slug=case.slug) }}" class="case-card-btn">
+                    Подробнее <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="{{ url_for('cases') }}" class="case-card-btn" style="padding: 14px 32px; font-size: 1.05rem;">
+            Все кейсы <i class="bi bi-grid"></i>
+        </a>
+    </div>
+</section>
+
+<!-- CTA секция -->
+<section class="cta-section">
+    <div class="cta-content fade-in">
+        <h2 class="cta-title">Готовы начать проект?</h2>
+        <p class="cta-text">
+            Оставьте заявку и мы свяжемся с вами в ближайшее время для обсуждения деталей.
+        </p>
+        <a href="{{ url_for('contact') }}" class="cta-button">
+            <i class="bi bi-envelope"></i> Связаться с нами
+        </a>
+    </div>
+</section>
+{% endblock %}

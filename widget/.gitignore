@@ -1,0 +1,10 @@
+# Environment variables
+.env
+
+# FAISS index (генерируется)
+faiss_index.bin
+faqs_metadata.npy
+
+# Python cache
+__pycache__/
+*.pyc

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}{{ case.title }} - IP-42-Team{% endblock %}
+
+{% block content %}
+<section class="case-detail">
+    <a href="{{ url_for('cases') }}" class="back-btn">
+        <i class="bi bi-arrow-left"></i> Назад к кейсам
+    </a>
+    
+    <div class="case-detail-header">
+        <h1 class="case-detail-title">{{ case.title }}</h1>
+        <div class="case-detail-meta">
+            <span><i class="bi bi-calendar"></i> {{ case.created_at.strftime('%d.%m.%Y') }}</span>
+            <span><i class="bi bi-clock"></i> Создан {{ case.created_at.strftime('%H:%M') }}</span>
+        </div>
+    </div>
+    
+    <div class="case-detail-image">
+        {% if case.slug == 'ai-support-assistant' %}
+            <i class="bi bi-headset"></i>
+        {% elif case.slug == 'ai-review-assistant' %}
+            <i class="bi bi-chat-heart"></i>
+        {% elif case.slug == 'telegram-parser-bot' %}
+            <i class="bi bi-database-check"></i>
+        {% else %}
+            <i class="bi bi-database-check"></i>
+        {% endif %}
+    </div>
+    
+    <div class="case-detail-content">
+        {{ case.full_description|safe }}
+        
+        {% if case.technologies %}
+        <div class="case-detail-tech">
+            {% for tech in case.technologies.split(',') %}
+            <span class="tech-tag">{{ tech.strip() }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <div style="text-align: center; margin-top: 50px;">
+        <a href="{{ url_for('contact') }}" class="cta-button">
+            <i class="bi bi-send"></i> Заказать похожий проект
+        </a>
+    </div>
+</section>
+{% endblock %}
